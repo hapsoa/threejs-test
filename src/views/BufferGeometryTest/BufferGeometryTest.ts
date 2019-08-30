@@ -7,6 +7,13 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { BufferGeometry, BufferAttribute } from 'three';
 
+// interface Properties {
+
+// }
+// interface Attributes {
+
+// }
+
 @Component({
   components: {}
 })
@@ -24,6 +31,21 @@ export default class Home extends Vue {
   private horizonCount: number = 20;
   private verticalCount: number = 20;
   private segmentWidth: number = 3;
+
+  private props: {
+    vertices: Float32Array;
+    colors: Float32Array;
+  } = {
+    vertices: new Float32Array(10),
+    colors: new Float32Array(10)
+  };
+  private attr: {
+    position: BufferAttribute;
+    colors: BufferAttribute;
+  } = {
+    position: new BufferAttribute(this.props.vertices, 3),
+    colors: new BufferAttribute(this.props.colors, 4)
+  };
 
   private init() {
     const container = document.getElementById('container') as HTMLElement;
@@ -45,8 +67,8 @@ export default class Home extends Vue {
     // const indices: number[] = [0, 1, 2];
     // const vertices: number[] = [-1, 1, 0, -1, -1, 0, 1, -1, 0];
 
-    const indices: number[] = [];
     const vertices: number[] = [];
+    const indices: number[] = [];
     const horizonCount: number = 20;
     const verticalCount: number = 20;
     const segmentWidth: number = 3;
@@ -108,6 +130,10 @@ export default class Home extends Vue {
         ((this.mesh.geometry as THREE.BufferGeometry).getAttribute(
           'position'
         ) as BufferAttribute).setZ(this.horizonCount * i + j, sinValue);
+
+        // ((this.mesh.geometry as THREE.BufferGeometry).getAttribute(
+        //   'position'
+        // ) as BufferAttribute).
       }
     }
 
