@@ -24,6 +24,11 @@ export default new Router({
       component: () => import('./views/BufferGeometryTest')
     },
     {
+      path: '/wave',
+      name: 'wave',
+      component: () => import('./views/Wave')
+    },
+    {
       path: '/template',
       name: 'template',
       component: () => import('./views/template/')
