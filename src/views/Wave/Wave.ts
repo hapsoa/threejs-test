@@ -5,15 +5,15 @@ import _ from 'lodash';
 import { Component, Vue } from 'vue-property-decorator';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { BufferGeometry, BufferAttribute } from 'three';
+import { BufferGeometry, BufferAttribute, DoubleSide } from 'three';
 
-interface SampleAttributes {
-  pos: THREE.BufferAttribute;
+interface HorizonWaveAttributes {
+  position: THREE.BufferAttribute;
   color: THREE.BufferAttribute;
 }
 
-interface SampleProperties {
-  pos: Float32Array;
+interface HorizonWaveProperties {
+  position: Float32Array;
   color: Float32Array;
 }
 
@@ -27,8 +27,8 @@ export default class Wave extends Vue {
 
   private tick: number = 0;
   private horizonWaveMesh!: THREE.Mesh;
-  private attr!: SampleAttributes;
-  private props!: SampleProperties;
+  private horizonWaveAttributes!: HorizonWaveAttributes;
+  private horizonWaveProperties!: HorizonWaveProperties;
 
   private horizonCount: number = 20;
   private verticalCount: number = 20;
@@ -47,7 +47,7 @@ export default class Wave extends Vue {
     this.camera.position.z = 50;
     this.camera.up = new THREE.Vector3(0, 0, 1);
 
-    // 화면인듯
+    // 화면 (ex. 방)
     this.scene = new THREE.Scene();
 
     const geometry = new THREE.BufferGeometry();
@@ -57,12 +57,30 @@ export default class Wave extends Vue {
     const horizonCount: number = 20;
     const verticalCount: number = 20;
     const segmentWidth: number = 3;
+
+    this.horizonWaveProperties = {
+      position: new Float32Array(horizonCount * verticalCount * 3),
+      color: new Float32Array(horizonCount * verticalCount * 4)
+    };
+    this.horizonWaveProperties.color.fill(1);
+
+    this.horizonWaveAttributes = {
+      position: new BufferAttribute(this.horizonWaveProperties.position, 3),
+      color: new BufferAttribute(this.horizonWaveProperties.color, 4)
+    };
+
     for (let i = 0; i < horizonCount; i++) {
       for (let j = 0; j < verticalCount; j++) {
+        // 구버전
         vertices.push(i * segmentWidth, j * segmentWidth, 0);
+        // 신버전
+        this.horizonWaveProperties.position.set(
+          [i * segmentWidth, j * segmentWidth, 0],
+          (horizonCount * j + i) * 3
+        );
         if (i < horizonCount - 1 && j < verticalCount - 1) {
           const standardIndex: number = horizonCount * j + i;
-
+          // 구버전
           indices.push(
             standardIndex,
             standardIndex + horizonCount,
@@ -73,17 +91,34 @@ export default class Wave extends Vue {
             standardIndex + horizonCount + 1,
             standardIndex + 1
           );
+          // 신버전
+          // this.horizonWaveProperties.position.set(
+          //   [
+          //     standardIndex,
+          //     standardIndex + horizonCount,
+          //     standardIndex + 1,
+          //     standardIndex + horizonCount,
+          //     standardIndex + horizonCount + 1,
+          //     standardIndex + 1
+          //   ],
+          //   ((horizonCount - 1) * j + i) * 6
+          // );
         }
       }
     }
 
+    // 구버전
     geometry.setIndex(indices);
-    geometry.addAttribute(
-      'position',
-      new THREE.Float32BufferAttribute(vertices, 3)
-    );
+    // geometry.addAttribute(
+    //   'position',
+    //   new THREE.Float32BufferAttribute(vertices, 3)
+    // );
+    // 신버전
+    geometry.addAttribute('position', this.horizonWaveAttributes.position);
 
-    const material = new THREE.MeshBasicMaterial();
+    const material = new THREE.MeshBasicMaterial({
+      side: DoubleSide
+    });
     this.horizonWaveMesh = new THREE.Mesh(geometry, material);
     this.scene.add(this.horizonWaveMesh);
 
