@@ -7,6 +7,16 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { BufferGeometry, BufferAttribute } from 'three';
 
+interface SampleAttributes {
+  pos: THREE.BufferAttribute;
+  color: THREE.BufferAttribute;
+}
+
+interface SampleProperties {
+  pos: Float32Array;
+  color: Float32Array;
+}
+
 @Component({})
 export default class Wave extends Vue {
   private camera!: THREE.PerspectiveCamera;
@@ -16,8 +26,9 @@ export default class Wave extends Vue {
   private controls!: OrbitControls;
 
   private tick: number = 0;
-
-  private mesh!: THREE.Mesh;
+  private horizonWaveMesh!: THREE.Mesh;
+  private attr!: SampleAttributes;
+  private props!: SampleProperties;
 
   private horizonCount: number = 20;
   private verticalCount: number = 20;
@@ -40,8 +51,6 @@ export default class Wave extends Vue {
     this.scene = new THREE.Scene();
 
     const geometry = new THREE.BufferGeometry();
-    // const indices: number[] = [0, 1, 2];
-    // const vertices: number[] = [-1, 1, 0, -1, -1, 0, 1, -1, 0];
 
     const indices: number[] = [];
     const vertices: number[] = [];
@@ -75,8 +84,8 @@ export default class Wave extends Vue {
     );
 
     const material = new THREE.MeshBasicMaterial();
-    this.mesh = new THREE.Mesh(geometry, material);
-    this.scene.add(this.mesh);
+    this.horizonWaveMesh = new THREE.Mesh(geometry, material);
+    this.scene.add(this.horizonWaveMesh);
 
     // renderer는 그리기 객체이다.
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -103,13 +112,13 @@ export default class Wave extends Vue {
         // ] = sinValue;
 
         // index의 기준은 vertices의 index 순서로 보인다.
-        ((this.mesh.geometry as THREE.BufferGeometry).getAttribute(
+        ((this.horizonWaveMesh.geometry as THREE.BufferGeometry).getAttribute(
           'position'
         ) as BufferAttribute).setZ(this.horizonCount * i + j, sinValue);
       }
     }
 
-    ((this.mesh.geometry as BufferGeometry).attributes
+    ((this.horizonWaveMesh.geometry as BufferGeometry).attributes
       .position as BufferAttribute).needsUpdate = true;
 
     this.tick++;
