@@ -92,17 +92,6 @@ export default class Wave extends Vue {
             standardIndex + 1
           );
           // 신버전
-          // this.horizonWaveProperties.position.set(
-          //   [
-          //     standardIndex,
-          //     standardIndex + horizonCount,
-          //     standardIndex + 1,
-          //     standardIndex + horizonCount,
-          //     standardIndex + horizonCount + 1,
-          //     standardIndex + 1
-          //   ],
-          //   ((horizonCount - 1) * j + i) * 6
-          // );
         }
       }
     }
