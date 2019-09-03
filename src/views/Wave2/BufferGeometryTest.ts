@@ -1,11 +1,21 @@
 /**
- * 양탄자 과제한 것
+ * 기본 Three.js + vue
  */
 import _ from 'lodash';
 import { Component, Vue } from 'vue-property-decorator';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { BufferGeometry, BufferAttribute } from 'three';
+
+interface HorizonWaveAttributes {
+  position: THREE.BufferAttribute;
+  color: THREE.BufferAttribute;
+}
+
+interface HorizonWaveProperties {
+  position: Float32Array;
+  color: Float32Array;
+}
 
 @Component({
   components: {}
