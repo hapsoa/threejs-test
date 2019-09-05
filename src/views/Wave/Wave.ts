@@ -58,9 +58,10 @@ export default class Wave extends Vue {
     // 화면 (ex. 방)
     this.scene = new THREE.Scene();
 
-    // this.horizonWave = new HorizonWave();
-    // this.scene.add(this.horizonWave.mesh);
+    this.horizonWave = new HorizonWave();
+    this.scene.add(this.horizonWave.mesh);
     this.waterDropWave = new WaterDropWave();
+    this.waterDropWave.mesh.translateX(100);
     this.scene.add(this.waterDropWave.mesh);
 
     // renderer는 그리기 객체이다.
@@ -79,9 +80,9 @@ export default class Wave extends Vue {
   private animate() {
     requestAnimationFrame(this.animate);
 
-    // this.horizonWave.update(this.tick, this.light);
+    this.horizonWave.update(this.tick, this.light);
     this.waterDropWave.update(this.tick, this.light);
-    this.tick += 0.03;
+    this.tick += 1;
     // renderer가 scene과 camera를 가지고 그린다.
     this.renderer.render(this.scene, this.camera);
   }

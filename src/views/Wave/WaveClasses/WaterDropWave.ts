@@ -100,19 +100,7 @@ export default class WaterDropWave {
     for (let i = 0; i < this.verticalCount; i++) {
       // const sinValue = Math.sin(tick / 10 + i / 5) * 2;
       for (let j = 0; j < this.horizonCount; j++) {
-        // @ts-ignore 옛날 코드
-        // ((this.mesh.geometry as THREE.BufferGeometry).attributes
-        //   .position as THREE.BufferAttribute).array[
-        //   (this.horizonCount * i + j) * 3 + 2
-        // ] = sinValue;
-
-        // 같은 sin함수를 만든다.
-        // Wave
-        // index의 기준은 vertices의 index 순서로 보인다.
-        // this.attributes.position.setZ(this.horizonCount * i + j, sinValue);
-
         // 점점커지는 원의 반지름과 mesh의 vertex 거리를 계산하는 로직을 만든다.
-
         const vertex = new THREE.Vector3(
           this.attributes.position.getX(this.horizonCount * i + j),
           this.attributes.position.getY(this.horizonCount * i + j),
@@ -133,7 +121,7 @@ export default class WaterDropWave {
 
         const distance = vertex.distanceTo(centerPoint);
 
-        const zValue: number = Math.sin(distance / 3 - tick);
+        const zValue: number = Math.sin(distance / 3 - tick / 30);
 
         this.attributes.position.setZ(this.horizonCount * i + j, zValue);
 
@@ -148,11 +136,24 @@ export default class WaterDropWave {
           }
         );
 
+        let colorR: number = 1;
+        let colorG: number = 1;
+        let colorB: number = 1;
+        if (i % 3 === 0) {
+          colorR = 0;
+        }
+        if (i % 3 === 1) {
+          colorG = 0;
+        }
+        if (i % 3 === 2) {
+          colorB = 0;
+        }
+
         this.attributes.color.setXYZ(
           this.horizonCount * i + j,
-          Math.abs(innerProductValue),
-          Math.abs(innerProductValue),
-          Math.abs(innerProductValue)
+          Math.abs(innerProductValue * colorR),
+          Math.abs(innerProductValue * colorG),
+          Math.abs(innerProductValue * colorB)
         );
       }
     }
