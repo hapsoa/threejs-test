@@ -4,9 +4,9 @@
   </div>
 </template>
 
-<script lang="ts" src="./BufferGeometryTest.ts">
+<script lang="ts" src="./RawShader.ts">
 </script>
 
 <style lang='scss'>
-@import './BufferGeometryTest.scss';
+@import './RawShader.scss';
 </style>
