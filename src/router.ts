@@ -34,6 +34,11 @@ export default new Router({
       component: () => import('./views/RawShader')
     },
     {
+      path: '/liquid',
+      name: 'liquid',
+      component: () => import('./views/Liquid')
+    },
+    {
       path: '/template',
       name: 'template',
       component: () => import('./views/template/')
