@@ -52,6 +52,7 @@ export default class Wave extends Vue {
     );
     this.camera.position.z = 50;
     this.camera.up = new THREE.Vector3(0, 0, 1);
+    this.camera.lookAt(new THREE.Vector3());
 
     // 화면 (ex. 방)
     this.scene = new THREE.Scene();
@@ -80,6 +81,9 @@ export default class Wave extends Vue {
 
     // this.horizonWave.update(this.tick, this.light);
     this.scatter.update(this.tick, this.light);
+    // this.scatter.mesh.quaternion.copy(this.camera.quaternion);
+    // this.scatter.mesh.rotation.setFromRotationMatrix(this.camera.matrix);
+    // this.scatter.mesh.lookAt(this.camera.position);
     this.tick += 1;
     // renderer가 scene과 camera를 가지고 그린다.
     this.renderer.render(this.scene, this.camera);

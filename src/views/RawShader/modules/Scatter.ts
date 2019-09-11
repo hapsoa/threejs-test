@@ -11,7 +11,7 @@ export default class Scatter {
   public attributes!: Attributes;
   public properties!: Properties;
 
-  private segmentCount: number = 1000;
+  private segmentCount: number = 3000;
   private segmentWidth: number = 3;
 
   private material!: THREE.Material;
