@@ -77,4 +77,9 @@ export default class Liquid extends Vue {
     this.init();
     this.animate();
   }
+
+  private beforeDestroy() {
+    this.scene.dispose();
+    this.renderer.dispose();
+  }
 }

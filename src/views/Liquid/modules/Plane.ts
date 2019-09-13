@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import { Attributes, Properties, Point } from '@/interfaces/GeometryInterfaces';
 
 // @ts-ignore
-import vs from '!!raw-loader!./default.vert';
+import vs from '!!raw-loader!./liquidVertex.vert';
 // @ts-ignore
-import fs from '!!raw-loader!./default.frag';
+import fs from '!!raw-loader!./liquidFragment.frag';
 
 export default class Plane {
   public mesh!: THREE.Mesh;
@@ -25,6 +25,18 @@ export default class Plane {
         type: 't',
         value: new THREE.TextureLoader().load('/img/testing-image.jpg')
       },
+      summerTexture: {
+        type: 't',
+        value: new THREE.TextureLoader().load('/img/summer.jpg')
+      },
+      autumnTexture: {
+        type: 't',
+        value: new THREE.TextureLoader().load('/img/autumn.jpg')
+      },
+      rippleTexture: {
+        type: 't',
+        value: new THREE.TextureLoader().load('/img/water-normalmap.jpg')
+      },
       time: { value: 1.0 }
     };
     this.material = new THREE.RawShaderMaterial({
@@ -39,6 +51,8 @@ export default class Plane {
   }
 
   public update(tick: number, light: Point) {
+    (this.material as THREE.RawShaderMaterial).uniforms.time.value =
+      tick * 0.001;
     // this.attributes.position.needsUpdate = true;
     // this.attributes.color.needsUpdate = true;
   }
