@@ -16,26 +16,30 @@ export default class Plane {
   public constructor() {
     const geometry = new THREE.PlaneGeometry(20, 20);
 
+    const summerTexture = new THREE.TextureLoader().load('/img/summer.jpg');
+    summerTexture.wrapS = THREE.RepeatWrapping;
+    summerTexture.wrapT = THREE.RepeatWrapping;
+    const autumnTexture = new THREE.TextureLoader().load('/img/autumn.jpg');
+    autumnTexture.wrapS = THREE.RepeatWrapping;
+    autumnTexture.wrapT = THREE.RepeatWrapping;
+    const rippleTexture = new THREE.TextureLoader().load(
+      '/img/water-normalmap.png'
+    );
+    rippleTexture.wrapS = THREE.RepeatWrapping;
+    rippleTexture.wrapT = THREE.RepeatWrapping;
+
     const uniforms = {
-      texture1: {
-        type: 't',
-        value: new THREE.TextureLoader().load('/img/testing-image.jpg')
-      },
-      texture2: {
-        type: 't',
-        value: new THREE.TextureLoader().load('/img/testing-image.jpg')
-      },
       summerTexture: {
         type: 't',
-        value: new THREE.TextureLoader().load('/img/summer.jpg')
+        value: summerTexture
       },
       autumnTexture: {
         type: 't',
-        value: new THREE.TextureLoader().load('/img/autumn.jpg')
+        value: autumnTexture
       },
       rippleTexture: {
         type: 't',
-        value: new THREE.TextureLoader().load('/img/water-normalmap.jpg')
+        value: rippleTexture
       },
       time: { value: 1.0 }
     };

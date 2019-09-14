@@ -3,9 +3,9 @@ precision mediump float;
 precision mediump int;
 
 uniform float time;
-uniform sampler2D texture1;
 uniform sampler2D summerTexture;
 uniform sampler2D autumnTexture;
+uniform sampler2D rippleTexture;
 
 // vertex에서 받아쓰는 변수
 varying vec3 vPosition;
@@ -20,9 +20,14 @@ void main()	{
 	// gl_FragColor = color;
 
 	vec2 uv = vec2(vUv);
-	vec4 movement = texture2D(summerTexture, uv + vec2(0, time));
+	// uv에다 rippleTexture를 씌운 rgba를 만든다.
+	vec4 movement = texture2D(rippleTexture, uv + vec2(0, time));
+	// 색상을 uv x좌표 y좌표에다 넣는다.
+	uv.x += movement.x * 0.1;
+	uv.y += movement.z * 0.1;
+	vec4 summerColor = texture2D(summerTexture, uv);
 
-	gl_FragColor = movement;
+	gl_FragColor = summerColor;
 	// gl_FragColor = texture2D(summerTexture, vUv);
 
 }
