@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { Component, Vue } from 'vue-property-decorator';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { BufferGeometry, BufferAttribute, DoubleSide } from 'three';
+import { BufferGeometry, BufferAttribute, DoubleSide, Vector3 } from 'three';
 
 interface HorizonWaveAttributes {
   position: THREE.BufferAttribute;
@@ -24,6 +24,7 @@ export default class Wave extends Vue {
   private renderer!: THREE.WebGLRenderer;
   // camera controls
   private controls!: OrbitControls;
+  private container!: HTMLElement;
 
   private tick: number = 0;
   private horizonWaveMesh!: THREE.Mesh;
@@ -35,12 +36,12 @@ export default class Wave extends Vue {
   private segmentWidth: number = 3;
 
   private init() {
-    const container = document.getElementById('container') as HTMLElement;
+    this.container = document.getElementById('container') as HTMLElement;
 
     // 카메라 생성 (fov: 작아질수록 가까이, aspect: 화면비율, near: 어느시점부터 보이기, far: 어디까지 보이기)
     this.camera = new THREE.PerspectiveCamera(
       70,
-      container.clientWidth / container.clientHeight,
+      this.container.clientWidth / this.container.clientHeight,
       0.01,
       100
     );
@@ -115,8 +116,11 @@ export default class Wave extends Vue {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
 
     // renderer의 크기를 설정한다. 화면 크기를 설정한다고 볼 수 있겠다.
-    this.renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(this.renderer.domElement);
+    this.renderer.setSize(
+      this.container.clientWidth,
+      this.container.clientHeight
+    );
+    this.container.appendChild(this.renderer.domElement);
 
     // camera controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -134,11 +138,12 @@ export default class Wave extends Vue {
         //   .position as THREE.BufferAttribute).array[
         //   (this.horizonCount * i + j) * 3 + 2
         // ] = sinValue;
-
+        //
+        // 아래 코드를 다시 켜야한다.
         // index의 기준은 vertices의 index 순서로 보인다.
-        ((this.horizonWaveMesh.geometry as THREE.BufferGeometry).getAttribute(
-          'position'
-        ) as BufferAttribute).setZ(this.horizonCount * i + j, sinValue);
+        // ((this.horizonWaveMesh.geometry as THREE.BufferGeometry).getAttribute(
+        //   'position'
+        // ) as BufferAttribute).setZ(this.horizonCount * i + j, sinValue);
       }
     }
 
@@ -153,5 +158,31 @@ export default class Wave extends Vue {
   private mounted() {
     this.init();
     this.animate();
+
+    const vector = new THREE.Vector3();
+    vector.x = ((vector.x + 1) * this.container.clientWidth) / 2;
+    vector.y = (-(vector.y - 1) * this.container.clientHeight) / 2;
+    vector.z = 0;
+    vector.project(this.camera);
+    //
+    this.container.onmousemove = event => {
+      // console.log('event', event);
+      // const vec = new THREE.Vector3(); // create once and reuse
+      // const pos = new THREE.Vector3(); // create once and reuse
+
+      // vec.set(event.clientX, -event.clientY, 0);
+
+      // vec.unproject(this.camera);
+
+      // vec.sub(this.camera.position).normalize();
+
+      // const distance = -this.camera.position.z / vec.z;
+
+      // pos.copy(this.camera.position).add(vec.multiplyScalar(distance));
+      // console.log('pos', pos);
+      //
+
+      console.log('vector', vector);
+    };
   }
 }
