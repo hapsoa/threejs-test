@@ -7,20 +7,20 @@ import { Component, Watch, Prop } from 'vue-property-decorator';
 export default class Editor extends Vue {
   private isNavigationOpen: boolean = false;
   //
-  private items = [
-    { title: 'Dashboard', icon: 'mdi-view-dashboard' },
-    { title: 'Photos', icon: 'mdi-image' },
-    { title: 'About', icon: 'mdi-help-box' }
+  private navigationItems = [
+    { title: 'example-1', icon: 'mdi-view-dashboard' },
+    { title: 'buffer-geometry-test', icon: 'mdi-image' },
+    { title: 'template', icon: 'mdi-help-box' }
   ];
-  private right = null;
 
   private mounted() {
     // console.log('mounted');
   }
 
-  private clickNavigation() {
-    //
-    console.log('click!!');
+  /**
+   * 네비게이션을 열고 닫는 함수이다.
+   */
+  private openNavigation() {
     this.isNavigationOpen = !this.isNavigationOpen;
   }
 }

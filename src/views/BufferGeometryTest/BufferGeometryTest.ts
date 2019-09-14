@@ -1,5 +1,5 @@
 /**
- * 기본 Three.js + vue
+ * 양탄자 과제한 것
  */
 import _ from 'lodash';
 import { Component, Vue } from 'vue-property-decorator';
@@ -25,6 +25,21 @@ export default class Home extends Vue {
   private verticalCount: number = 20;
   private segmentWidth: number = 3;
 
+  private props: {
+    vertices: Float32Array;
+    colors: Float32Array;
+  } = {
+    vertices: new Float32Array(10),
+    colors: new Float32Array(10)
+  };
+  private attr: {
+    position: BufferAttribute;
+    colors: BufferAttribute;
+  } = {
+    position: new BufferAttribute(this.props.vertices, 3),
+    colors: new BufferAttribute(this.props.colors, 4)
+  };
+
   private init() {
     const container = document.getElementById('container') as HTMLElement;
 
@@ -45,8 +60,8 @@ export default class Home extends Vue {
     // const indices: number[] = [0, 1, 2];
     // const vertices: number[] = [-1, 1, 0, -1, -1, 0, 1, -1, 0];
 
-    const indices: number[] = [];
     const vertices: number[] = [];
+    const indices: number[] = [];
     const horizonCount: number = 20;
     const verticalCount: number = 20;
     const segmentWidth: number = 3;
@@ -108,6 +123,10 @@ export default class Home extends Vue {
         ((this.mesh.geometry as THREE.BufferGeometry).getAttribute(
           'position'
         ) as BufferAttribute).setZ(this.horizonCount * i + j, sinValue);
+
+        // ((this.mesh.geometry as THREE.BufferGeometry).getAttribute(
+        //   'position'
+        // ) as BufferAttribute).
       }
     }
 

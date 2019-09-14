@@ -29,6 +29,16 @@ export default new Router({
       component: () => import('./views/Wave')
     },
     {
+      path: '/raw-shader',
+      name: 'raw-shader',
+      component: () => import('./views/RawShader')
+    },
+    {
+      path: '/liquid',
+      name: 'liquid',
+      component: () => import('./views/Liquid')
+    },
+    {
       path: '/template',
       name: 'template',
       component: () => import('./views/template/')
