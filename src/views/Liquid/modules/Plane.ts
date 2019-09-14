@@ -22,11 +22,11 @@ export default class Plane {
     const autumnTexture = new THREE.TextureLoader().load('/img/autumn.jpg');
     autumnTexture.wrapS = THREE.RepeatWrapping;
     autumnTexture.wrapT = THREE.RepeatWrapping;
-    const rippleTexture = new THREE.TextureLoader().load(
+    const rippleNormalMapTexture = new THREE.TextureLoader().load(
       '/img/water-normalmap.png'
     );
-    rippleTexture.wrapS = THREE.RepeatWrapping;
-    rippleTexture.wrapT = THREE.RepeatWrapping;
+    rippleNormalMapTexture.wrapS = THREE.RepeatWrapping;
+    rippleNormalMapTexture.wrapT = THREE.RepeatWrapping;
 
     const uniforms = {
       summerTexture: {
@@ -37,11 +37,17 @@ export default class Plane {
         type: 't',
         value: autumnTexture
       },
-      rippleTexture: {
+      rippleNormalMapTexture: {
         type: 't',
-        value: rippleTexture
+        value: rippleNormalMapTexture
       },
-      time: { value: 1.0 }
+      time: { value: 1.0 },
+      currentTextureNumber: {
+        value: 1
+      },
+      changingTime: {
+        value: 0.0
+      }
     };
     this.material = new THREE.RawShaderMaterial({
       uniforms,
@@ -54,10 +60,43 @@ export default class Plane {
     this.mesh = new THREE.Mesh(geometry, this.material);
   }
 
-  public update(tick: number, light: Point) {
+  /**
+   * animate()함수 매번 호출시 호출하는 함수
+   * @param tick
+   * @param light
+   */
+  public update(tick: number) {
     (this.material as THREE.RawShaderMaterial).uniforms.time.value =
       tick * 0.001;
     // this.attributes.position.needsUpdate = true;
     // this.attributes.color.needsUpdate = true;
+  }
+
+  /**
+   * 일정 시간동안 이미지를 바꿔주는 함수이다.
+   */
+  public changeTexture(newTextureName: string, time: number) {
+    // 물결이 일어난다.
+    // 여기서 uniform을 전달해 줄 수 밖에 없는듯 하다.
+    // true냐 false냐에 따라 변하는 식이 되지 않을까 한다.
+    // vert와 frag에 넘겨줄 수 있는 것은 uniform이다.
+    // 시간과 조건 변수
+    // uniform에 대한 시간을 조정하는게 좋아보인다.
+
+    // 시간을 넣어주고
+    // tick마다 조금씩 감소시켜준다.
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.changingTime.value = 3.0;
+
+    // 그동안 물결이 일어난다.
+    // 그동안 이미지가 변경돼야 한다.
+    // texture가 1번에서 2번으로 바뀌는지, 2번에서 1번으로 바뀌는지 알아야 한다.
+    if (newTextureName === 'summer') {
+      //
+    } else {
+      //
+    }
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.currentTextureNumber.value = newTextureName;
   }
 }
