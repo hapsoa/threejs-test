@@ -73,7 +73,7 @@ export default class Liquid extends Vue {
 
     // mouse 움직일시 이벤트를 단다.
     this.container.addEventListener('click', event => {
-      console.log('mouse click');
+      console.log('mouse click', this.textureName);
 
       // 1)스크롤 시 물결이 일어난다(물결 normalmap texture 작동). + 2)이미지가 변한다 (sin파)
       // 3초간 걸쳐서 나타난다.

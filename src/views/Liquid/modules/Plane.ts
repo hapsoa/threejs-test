@@ -13,6 +13,8 @@ export default class Plane {
 
   private material!: THREE.Material;
 
+  private remainingChangingTime: number = 0;
+
   public constructor() {
     const geometry = new THREE.PlaneGeometry(20, 20);
 
@@ -43,10 +45,10 @@ export default class Plane {
       },
       time: { value: 1.0 },
       currentTextureNumber: {
-        value: 1
+        value: 2.0
       },
       changingTime: {
-        value: 0.0
+        value: 0
       }
     };
     this.material = new THREE.RawShaderMaterial({
@@ -68,6 +70,14 @@ export default class Plane {
   public update(tick: number) {
     (this.material as THREE.RawShaderMaterial).uniforms.time.value =
       tick * 0.001;
+
+    if (this.remainingChangingTime > 0) {
+      this.remainingChangingTime -= 0.1;
+    } else {
+      (this
+        .material as THREE.RawShaderMaterial).uniforms.changingTime.value = 0;
+    }
+
     // this.attributes.position.needsUpdate = true;
     // this.attributes.color.needsUpdate = true;
   }
@@ -85,18 +95,18 @@ export default class Plane {
 
     // 시간을 넣어주고
     // tick마다 조금씩 감소시켜준다.
-    (this
-      .material as THREE.RawShaderMaterial).uniforms.changingTime.value = 3.0;
+    (this.material as THREE.RawShaderMaterial).uniforms.changingTime.value = 1;
+    this.remainingChangingTime = 3;
 
     // 그동안 물결이 일어난다.
     // 그동안 이미지가 변경돼야 한다.
     // texture가 1번에서 2번으로 바뀌는지, 2번에서 1번으로 바뀌는지 알아야 한다.
     if (newTextureName === 'summer') {
-      //
+      (this
+        .material as THREE.RawShaderMaterial).uniforms.currentTextureNumber.value = 1.0;
     } else {
-      //
+      (this
+        .material as THREE.RawShaderMaterial).uniforms.currentTextureNumber.value = 2.0;
     }
-    (this
-      .material as THREE.RawShaderMaterial).uniforms.currentTextureNumber.value = newTextureName;
   }
 }
