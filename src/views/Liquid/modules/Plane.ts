@@ -44,11 +44,17 @@ export default class Plane {
         value: rippleNormalMapTexture
       },
       time: { value: 1.0 },
-      currentTextureNumber: {
-        value: 2.0
+      totalChangingTime: {
+        value: 3000.0
       },
       changingTime: {
-        value: 0
+        value: 0.0
+      },
+      beforeTextureNumber: {
+        value: 1
+      },
+      afterTextureNumber: {
+        value: 1
       }
     };
     this.material = new THREE.RawShaderMaterial({
@@ -67,46 +73,49 @@ export default class Plane {
    * @param tick
    * @param light
    */
-  public update(tick: number) {
+  // public update(tick: number) {
+  //   (this.material as THREE.RawShaderMaterial).uniforms.time.value =
+  //     tick * 0.001;
+
+  //   if (this.remainingChangingTime > 0) {
+  //     this.remainingChangingTime -= 0.1;
+  //   } else {
+  //     (this
+  //       .material as THREE.RawShaderMaterial).uniforms.changingTime.value = 0;
+  //   }
+
+  //   // this.attributes.position.needsUpdate = true;
+  //   // this.attributes.color.needsUpdate = true;
+  // }
+
+  public basicUpdate(tick: number, afterTextureNumber: number) {
     (this.material as THREE.RawShaderMaterial).uniforms.time.value =
       tick * 0.001;
-
-    if (this.remainingChangingTime > 0) {
-      this.remainingChangingTime -= 0.1;
-    } else {
-      (this
-        .material as THREE.RawShaderMaterial).uniforms.changingTime.value = 0;
-    }
-
-    // this.attributes.position.needsUpdate = true;
-    // this.attributes.color.needsUpdate = true;
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.beforeTextureNumber.value = afterTextureNumber;
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.afterTextureNumber.value = afterTextureNumber;
   }
 
   /**
    * 일정 시간동안 이미지를 바꿔주는 함수이다.
    */
-  public changeTexture(newTextureName: string, time: number) {
-    // 물결이 일어난다.
-    // 여기서 uniform을 전달해 줄 수 밖에 없는듯 하다.
-    // true냐 false냐에 따라 변하는 식이 되지 않을까 한다.
-    // vert와 frag에 넘겨줄 수 있는 것은 uniform이다.
-    // 시간과 조건 변수
-    // uniform에 대한 시간을 조정하는게 좋아보인다.
-
-    // 시간을 넣어주고
-    // tick마다 조금씩 감소시켜준다.
-    (this.material as THREE.RawShaderMaterial).uniforms.changingTime.value = 1;
-    this.remainingChangingTime = 3;
-
-    // 그동안 물결이 일어난다.
-    // 그동안 이미지가 변경돼야 한다.
-    // texture가 1번에서 2번으로 바뀌는지, 2번에서 1번으로 바뀌는지 알아야 한다.
-    if (newTextureName === 'summer') {
-      (this
-        .material as THREE.RawShaderMaterial).uniforms.currentTextureNumber.value = 1.0;
-    } else {
-      (this
-        .material as THREE.RawShaderMaterial).uniforms.currentTextureNumber.value = 2.0;
-    }
+  public changeTexture(
+    tick: number,
+    totalChangingTime: number,
+    changingTime: number,
+    beforeTextureNumber: number,
+    afterTextureNumber: number
+  ) {
+    (this.material as THREE.RawShaderMaterial).uniforms.time.value =
+      tick * 0.001;
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.totalChangingTime.value = totalChangingTime;
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.changingTime.value = changingTime;
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.beforeTextureNumber.value = beforeTextureNumber;
+    (this
+      .material as THREE.RawShaderMaterial).uniforms.afterTextureNumber.value = afterTextureNumber;
   }
 }

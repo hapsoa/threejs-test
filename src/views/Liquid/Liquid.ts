@@ -26,6 +26,11 @@ export default class Liquid extends Vue {
   private plane!: Plane;
   private textureName: string = 'summer'; // summer or autumn
 
+  private changingTime: number = 0;
+  private totalChangingTime: number = 10000;
+  private beforeTextureNumber: number = 2;
+  private afterTextureNumber: number = 1;
+
   private init() {
     this.container = document.getElementById('container') as HTMLElement;
 
@@ -61,7 +66,22 @@ export default class Liquid extends Vue {
   private animate() {
     requestAnimationFrame(this.animate);
 
-    this.plane.update(this.tick);
+    // this.plane.update(this.tick);
+
+    this.changingTime -= 100;
+    if (this.changingTime <= 0) {
+      this.plane.basicUpdate(this.tick, this.afterTextureNumber);
+      console.log('basicUpdate');
+    } else {
+      this.plane.changeTexture(
+        this.tick,
+        this.totalChangingTime,
+        this.changingTime,
+        this.beforeTextureNumber,
+        this.afterTextureNumber
+      );
+    }
+
     this.tick += 1;
     // renderer가 scene과 camera를 가지고 그린다.
     this.renderer.render(this.scene, this.camera);
@@ -73,16 +93,16 @@ export default class Liquid extends Vue {
 
     // mouse 움직일시 이벤트를 단다.
     this.container.addEventListener('click', event => {
-      console.log('mouse click', this.textureName);
-
       // 1)스크롤 시 물결이 일어난다(물결 normalmap texture 작동). + 2)이미지가 변한다 (sin파)
       // 3초간 걸쳐서 나타난다.
-      if (this.textureName === 'summer') {
-        this.plane.changeTexture('autumn', 3000);
-        this.textureName = 'autumn';
+      if (this.beforeTextureNumber === 1) {
+        this.changingTime = 10000;
+        this.beforeTextureNumber = 2;
+        this.afterTextureNumber = 1;
       } else {
-        this.plane.changeTexture('summer', 3000);
-        this.textureName = 'summer';
+        this.changingTime = 10000;
+        this.beforeTextureNumber = 1;
+        this.afterTextureNumber = 2;
       }
     });
   }
