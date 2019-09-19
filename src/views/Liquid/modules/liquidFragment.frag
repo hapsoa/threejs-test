@@ -37,7 +37,7 @@ void main()	{
 
 	if (beforeTextureNumber == 1 && afterTextureNumber == 2) {
 		gl_FragColor = sin(changingTime/totalChangingTime * 0.5 * 3.14) * summerColor
-			+ cos(changingTime/totalChangingTime * 0.5 * 3.14) * autumnColor ;
+			+ cos(changingTime/totalChangingTime * 0.5 * 3.14) * autumnColor;
 	} 
 	else if (beforeTextureNumber == 2 && afterTextureNumber == 1) {
 		gl_FragColor = sin(changingTime/totalChangingTime * 0.5 * 3.14) * autumnColor

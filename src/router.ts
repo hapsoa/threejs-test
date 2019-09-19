@@ -39,6 +39,11 @@ export default new Router({
       component: () => import('./views/Liquid')
     },
     {
+      path: '/changing-image',
+      name: 'changing-image',
+      component: () => import('./views/ChangingImage')
+    },
+    {
       path: '/template',
       name: 'template',
       component: () => import('./views/template/')
